@@ -79,11 +79,14 @@ function getFilenameDate (exif) {
 function caption (exif, picasa) {
   return picasaValue(picasa, 'caption') ||
          tagValue(exif, 'EXIF', 'ImageDescription') ||
+         tagValue(exif, 'EXIF', 'Description') ||
+         tagValue(exif, 'EXIF', 'Title') ||
          tagValue(exif, 'IPTC', 'Caption-Abstract') ||
          tagValue(exif, 'IPTC', 'Headline') ||
          tagValue(exif, 'XMP', 'Description') ||
          tagValue(exif, 'XMP', 'Title') ||
-         tagValue(exif, 'XMP', 'Label')
+         tagValue(exif, 'XMP', 'Label') ||
+         tagValue(exif, 'QuickTime', 'Title')
 }
 
 function keywords (exif, picasa) {
