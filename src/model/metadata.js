@@ -33,7 +33,7 @@ class Metadata {
     const size = dimensions(exiftool)
     this.width = size.width
     this.height = size.height
-    this.exif = opts ? (opts.embedExif ? exiftool.EXIF : undefined) : undefined
+    this.exif = opts ? (opts.embedExif ? mergedExif(exiftool.EXIF, exiftool.QuickTime, exiftool.Composite) : undefined) : undefined
     // metadata could also include fields like
     //  - lat = 51.5
     //  - long = 0.12
@@ -41,6 +41,18 @@ class Metadata {
     //  - city = "London"
     //  - aperture = 1.8
   }
+}
+
+// Looks at the given EXIF data, and fills in missing values, which we know to be available but under a different key
+function mergedExif(e = {}, q = {}, c = {}) {
+  return {...e,
+    DateTimeOriginal: e.DateTimeOriginal || q.MediaCreateDate, // Specimen: iPhone 5S video (MOV)
+    Model: e.Model || q.Model, // Specimen: iPhone 5S video (MOV)
+    Make: e.Make || q.Make, // Specimen: iPhone 5S video (MOV)
+    GPSLatitude: e.GPSLatitude || c.GPSLatitude, // Specimen: iPhone 5S video (MOV)
+    GPSLongitude: e.GPSLongitude || c.GPSLongitude, // Specimen: iPhone 5S video (MOV)
+    GPSAltitude: e.GPSAltitude || q.GPSAltitude, // Specimen: iPhone 5S video (MOV)
+  };
 }
 
 function getDate (exif) {
