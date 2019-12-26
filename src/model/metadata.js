@@ -90,15 +90,18 @@ function getFilenameDate (exif) {
 
 function caption (exif, picasa) {
   return picasaValue(picasa, 'caption') ||
-         tagValue(exif, 'EXIF', 'ImageDescription') ||
+         // First prefer "Description" if available
          tagValue(exif, 'EXIF', 'Description') ||
+         tagValue(exif, 'XMP', 'Description') ||
+         tagValue(exif, 'EXIF', 'ImageDescription') ||
+         // Then "Title"
          tagValue(exif, 'EXIF', 'Title') ||
+         tagValue(exif, 'XMP', 'Title') ||
+         tagValue(exif, 'QuickTime', 'Title') ||
+         // Finally, some other educated guesses
          tagValue(exif, 'IPTC', 'Caption-Abstract') ||
          tagValue(exif, 'IPTC', 'Headline') ||
-         tagValue(exif, 'XMP', 'Description') ||
-         tagValue(exif, 'XMP', 'Title') ||
-         tagValue(exif, 'XMP', 'Label') ||
-         tagValue(exif, 'QuickTime', 'Title')
+         tagValue(exif, 'XMP', 'Label')
 }
 
 function keywords (exif, picasa) {
