@@ -9,15 +9,10 @@ if [ ! -d "$INPUT_DIR" ]; then
   exit 1
 fi
 
-TEMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t tmpdir)" # cross-platform boilerplate https://unix.stackexchange.com/a/84980
-
-mkdir -p "$OUTPUT_DIR"
-rmdir "$TEMP_DIR"
-mv "$OUTPUT_DIR" "$TEMP_DIR"
-
 "$SELF_DIR/thumbsup.js" \
   --input "$INPUT_DIR" \
-  --output "$TEMP_DIR" \
+  --output "$OUTPUT_DIR" \
+  --exclude "$OUTPUT_DIR" \
   --cleanup \
   --no-usage-stats \
   --title "" \
@@ -28,5 +23,3 @@ mv "$OUTPUT_DIR" "$TEMP_DIR"
   --theme-path "$SELF_DIR/../../gallery.jrw.fi-theme" \
   --embed-exif \
   --locale fi
-
-mv "$TEMP_DIR" "$OUTPUT_DIR"
