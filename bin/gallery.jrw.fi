@@ -12,7 +12,7 @@ fi
 "$SELF_DIR/thumbsup.js" \
   --input "$INPUT_DIR" \
   --output "$OUTPUT_DIR" \
-  --exclude "$OUTPUT_DIR" \
+  --exclude "$OUTPUT_DIR/**" \
   --cleanup \
   --no-usage-stats \
   --title "" \
