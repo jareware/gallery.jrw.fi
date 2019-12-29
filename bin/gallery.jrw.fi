@@ -23,3 +23,5 @@ fi
   --theme-path "$SELF_DIR/../../gallery.jrw.fi-theme" \
   --embed-exif \
   --locale fi
+
+(cd "$OUTPUT_DIR" && npx serve)
