@@ -56,6 +56,8 @@ function mergedExif(exiftool) {
   };
 }
 
+// Returns the MOST LIKELY correct creation date for the current media
+// @example 1580566344000
 function getDate (exif) {
   // first, check if there's a valid date in the metadata
   const metadate = getMetaDate(exif)
@@ -67,13 +69,20 @@ function getDate (exif) {
   return moment(exif.File.FileModifyDate, EXIF_DATE_FORMAT).valueOf()
 }
 
+// Returns the MOST LIKELY correct metadata-based creation date for the current media
+// @example "2020:02:01 16:12:24+02:00"
+function getRawMetaDate (exif) {
+  return tagValue(exif, 'EXIF', 'DateTimeOriginal') ||
+         tagValue(exif, 'H264', 'DateTimeOriginal') ||
+         tagValue(exif, 'QuickTime', 'DateTimeOriginal') ||
+         tagValue(exif, 'QuickTime', 'ContentCreateDate') ||
+         tagValue(exif, 'QuickTime', 'CreationDate') ||
+         tagValue(exif, 'QuickTime', 'CreateDate')
+}
+
+// Same as getRawMetaDate(), but as a parsed Moment object
 function getMetaDate (exif) {
-  const date = tagValue(exif, 'EXIF', 'DateTimeOriginal') ||
-               tagValue(exif, 'H264', 'DateTimeOriginal') ||
-               tagValue(exif, 'QuickTime', 'DateTimeOriginal') ||
-               tagValue(exif, 'QuickTime', 'ContentCreateDate') ||
-               tagValue(exif, 'QuickTime', 'CreationDate') ||
-               tagValue(exif, 'QuickTime', 'CreateDate')
+  const date = getRawMetaDate(exif);
   if (date) {
     const parsed = moment(date, EXIF_DATE_FORMAT)
     if (parsed.isValid()) return parsed
